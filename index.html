@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stayful: Predict your energy crashes</title>
+<meta name="description" content="Stayful predicts your energy crashes before they hit, and tells you when to have your coffee or nap to skip them. For iPhone.">
+<meta name="theme-color" content="#0D0F12">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Stayful: Predict your energy crashes">
+<meta property="og:description" content="Know when you'll crash. Fix it before it happens.">
+<meta property="og:image" content="https://stayful.app/img/hero.jpg">
+<meta property="og:url" content="https://stayful.app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<!-- When the app is live, add: <meta name="apple-itunes-app" content="app-id=6830175789"> -->
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="canonical" href="https://stayful.app/">
+<style>
+:root{
+  --bg:#0D0F12; --bg-deep:#06080B; --surface:#13161A; --raised:#171A1F; --tile:#1C2026;
+  --border:#2A303A; --text:#EDEBE6; --muted:#A7ADB5; --faint:#8B929C;
+  --caffeine:#F2B544; --on-caffeine:#1A1305; --peak:#7FD49B; --peak-text:#9ADBAE; --nap:#7DB3FF;
+  --radius:22px; --gutter:20px; --max:1120px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue","Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.035em;line-height:1.02}
+p{margin:0}
+.amber{color:var(--caffeine)} .green{color:var(--peak)} .blue{color:var(--nap)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(13,15,18,.78);backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid rgba(42,48,58,.6)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand img{width:30px;height:30px;border-radius:8px}
+.nav-cta{font-size:15px;font-weight:600;text-decoration:none;padding:8px 16px;border-radius:999px;background:var(--text);color:var(--bg)}
+
+/* buttons */
+.store{display:inline-flex;align-items:center;gap:12px;padding:14px 26px;border-radius:999px;background:var(--text);color:var(--bg);font-weight:700;font-size:17px;text-decoration:none;transition:transform .15s ease}
+.store:hover{transform:translateY(-1px)}
+.store svg{width:20px;height:20px}
+.fine{color:var(--faint);font-size:14px;margin-top:14px}
+
+/* hero */
+.hero{position:relative;padding:64px 0 0;text-align:center;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-10% -20% auto;height:900px;background:radial-gradient(50% 45% at 62% 62%,rgba(127,212,155,.14),transparent 70%),radial-gradient(30% 30% at 40% 70%,rgba(242,181,68,.08),transparent 70%);pointer-events:none}
+.hero h1{position:relative;font-size:clamp(44px,9vw,92px)}
+.hero .lead{position:relative;max-width:640px;margin:22px auto 0;color:var(--muted);font-size:clamp(18px,2.2vw,21px)}
+.hero .cta{position:relative;margin-top:32px}
+.hero-shot{position:relative;margin:40px auto 0;max-width:1100px;width:100%;
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 12%,#000 68%,transparent),linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,transparent,#000 12%,#000 68%,transparent),linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);
+  mask-composite:intersect}
+
+/* sections */
+section{padding:96px 0}
+.kicker{font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+.section-title{font-size:clamp(34px,5.5vw,56px);max-width:760px}
+.section-lead{color:var(--muted);font-size:19px;max-width:620px;margin-top:18px}
+
+/* steps */
+.steps{display:grid;gap:16px;margin-top:44px;counter-reset:step}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px}
+.step::before{counter-increment:step;content:counter(step);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--tile);color:var(--muted);font-weight:700;font-size:15px;margin-bottom:18px}
+.step h3{font-size:24px;letter-spacing:-.02em}
+.step p{color:var(--muted);margin-top:8px}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+
+/* features */
+.feature{display:grid;gap:36px;align-items:center;padding:56px 0;border-top:1px solid var(--border)}
+.feature:first-of-type{border-top:0}
+.feature .shot{max-width:360px;width:100%;margin:0 auto;
+  -webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,#000 70%,transparent),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  mask-composite:intersect}
+.feature h3{font-size:clamp(34px,5vw,52px)}
+.feature p{color:var(--muted);font-size:19px;margin-top:18px;max-width:480px}
+.pro{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:999px;background:rgba(242,181,68,.14);color:var(--caffeine);margin-bottom:18px}
+@media(max-width:859px){
+  .feature .text{text-align:center}
+  .feature h3 br{display:none}
+  .feature p{margin-left:auto;margin-right:auto}
+}
+@media(min-width:860px){
+  .feature{grid-template-columns:1fr 1fr;gap:64px}
+  .feature:nth-of-type(even) .text{order:2}
+}
+
+/* pricing */
+.plans{display:grid;gap:16px;margin-top:44px}
+.plan{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.plan.is-pro{border-color:rgba(242,181,68,.45);background:linear-gradient(180deg,rgba(242,181,68,.06),transparent 40%),var(--surface)}
+.plan h3{font-size:26px;letter-spacing:-.02em}
+.price{margin-top:10px;font-size:15px;color:var(--muted)}
+.price strong{display:block;font-size:34px;color:var(--text);letter-spacing:-.03em;font-weight:800}
+.plan ul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+.plan li{display:flex;gap:12px;align-items:flex-start}
+.plan li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--tile) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.4l2.6 2.4L13 6.4' fill='none' stroke='%237FD49B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px no-repeat}
+.plan.is-pro li::before{background-color:rgba(242,181,68,.14);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.4l2.6 2.4L13 6.4' fill='none' stroke='%23F2B544' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.plans-note{color:var(--faint);font-size:14px;margin-top:16px}
+@media(min-width:860px){.plans{grid-template-columns:1fr 1fr}}
+
+/* privacy */
+.privacy{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:40px 28px;display:grid;gap:28px}
+.privacy h2{font-size:clamp(30px,4.6vw,46px)}
+.privacy p{color:var(--muted);font-size:18px;margin-top:16px}
+.privacy a{color:var(--text);font-weight:600}
+.facts{display:grid;gap:12px;align-content:start}
+.fact{background:var(--tile);border-radius:16px;padding:16px 18px}
+.fact strong{display:block;font-size:16px}
+.fact span{color:var(--faint);font-size:15px}
+@media(min-width:860px){.privacy{grid-template-columns:1.2fr 1fr;padding:56px}}
+
+/* faq */
+.faq{margin-top:36px;border-top:1px solid var(--border)}
+.faq details{border-bottom:1px solid var(--border)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;font-size:19px;font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:26px;font-weight:400;color:var(--faint);transition:transform .2s ease}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq p{color:var(--muted);padding:0 0 22px;max-width:720px}
+
+/* final */
+.final{text-align:center;padding:110px 0 120px;position:relative;overflow:hidden}
+.final::before{content:"";position:absolute;inset:0;background:radial-gradient(40% 50% at 50% 100%,rgba(127,212,155,.12),transparent 70%);pointer-events:none}
+.final h2{position:relative;font-size:clamp(38px,7vw,72px)}
+.final .icon{position:relative;width:88px;height:88px;border-radius:22px;margin:0 auto 28px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.final .cta{position:relative;margin-top:32px}
+
+/* footer */
+footer{border-top:1px solid var(--border);padding:36px 0 48px;color:var(--faint);font-size:14px}
+footer .row{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--text)}
+footer .disclaimer{margin-top:18px;max-width:640px}
+
+@media(max-width:640px){.hero-shot{width:170%;max-width:none;margin-left:-14%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.store{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="img/icon-64.png" alt="" width="30" height="30">Stayful</a>
+    <a class="nav-cta" href="#get">Get the app</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <h1>Know when you'll <span class="amber">crash.</span><br>Fix it before it <span class="green">happens.</span></h1>
+      <p class="lead">Stayful predicts your energy crashes before they hit, and tells you when to have your coffee or nap to skip them.</p>
+      <div class="cta" id="get">
+        <!-- Replace with Apple's official "Download on the App Store" badge (Apple Marketing Tools) and the app link once the app is live. -->
+        <a class="store" href="#get" aria-label="Coming soon on the App Store">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 2 4.5 13.2c-.4.5 0 1.3.6 1.3H11l-1 7.5 8.5-11.2c.4-.5 0-1.3-.6-1.3H13l1-7.5z"/></svg>
+          Coming soon on the App Store
+        </a>
+        <p class="fine">Free to download. Pro comes with a 7-day free trial. For iPhone.</p>
+      </div>
+    </div>
+    <img class="hero-shot" src="img/hero.jpg" width="1600" height="1307" alt="Stayful on iPhone: crash around 13:30. A coffee nap at 12:30 softens the crash: the curve dips far less than without it.">
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <p class="kicker">How it works</p>
+      <h2 class="section-title">Your afternoon crash, seen from the morning.</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>See your day</h3>
+          <p>Stayful reads last night's sleep and your coffees, and predicts your energy hour by hour until bedtime.</p>
+        </div>
+        <div class="step">
+          <h3>Spot the crash</h3>
+          <p>The curve shows when your energy drops, hours before it happens.</p>
+        </div>
+        <div class="step">
+          <h3>Soften it</h3>
+          <p>Have a coffee or a 20-minute power nap at the time Stayful gives you, before the drop. A warning tells you when a cup is too late for tonight's sleep.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" style="padding-top:24px">
+    <div class="wrap">
+      <article class="feature">
+        <div class="text">
+          <h3>The right <span class="blue">nap,</span> <br>right now.</h3>
+          <p>Start a 20-minute power nap and follow the countdown on your Lock Screen and in the Dynamic Island. The alarm wakes you on time, even on silent.</p>
+        </div>
+        <img class="shot" src="img/nap.jpg" width="660" height="1203" loading="lazy" alt="Power nap timer: 14:32 of 20 min, alarm at 17:20, with +5 min and I'm up buttons.">
+      </article>
+
+      <article class="feature">
+        <div class="text">
+          <span class="pro">PRO</span>
+          <h3>Plan your <br><span class="green">peak.</span></h3>
+          <p>Need to be at your best for an exam or a meeting at 14:00, today or tomorrow? Pick the window, and Stayful times your coffee and nap around your busy hours.</p>
+        </div>
+        <img class="shot" src="img/plan.jpg" width="660" height="1203" loading="lazy" alt="Plan your peak for a 14:00 to 16:00 meeting: coffee at 13:10, a 20-minute nap at 13:15, Peak for the whole window.">
+      </article>
+
+      <article class="feature">
+        <div class="text">
+          <span class="pro">PRO</span>
+          <h3>It learns <br><span class="green">you.</span></h3>
+          <p>Each evening, Stayful asks around what time you crashed. After 5 answers, predictions move to the time you actually crash, and Insights show your week, and which bedtime and first coffee give you crash-free days.</p>
+        </div>
+        <img class="shot" src="img/insights.jpg" width="660" height="1203" loading="lazy" alt="Insights, Your week: 8 h 20 a day in Peak, 1 h 10 more than last week, and a day with no crash after a nap before the dip.">
+      </article>
+
+      <article class="feature">
+        <div class="text">
+          <span class="pro">PRO</span>
+          <h3>Always one <br>step <span class="amber">ahead.</span></h3>
+          <p>Widgets show your next dip or crash and your week, on the Home Screen and the Lock Screen. Log a coffee in one tap, from a widget, Control Center, Siri or the Action button.</p>
+        </div>
+        <img class="shot" src="img/widgets.jpg" width="660" height="1203" loading="lazy" alt="Home Screen widgets: crash around 13:30 with a coffee at 12:30, a countdown to the crash, Your week at 8 h 20 a day, and today's curve with a coffee nap at 12:30.">
+      </article>
+    </div>
+  </section>
+
+  <section id="pricing" style="padding-top:40px">
+    <div class="wrap">
+      <p class="kicker">Pricing</p>
+      <h2 class="section-title">Free to start. Pro when you want it to work for you.</h2>
+      <div class="plans">
+        <div class="plan">
+          <h3>Starter</h3>
+          <p class="price"><strong>€0</strong>forever</p>
+          <ul>
+            <li>Your energy curve and today's crash</li>
+            <li>Coffee, energy drink and nap logging</li>
+            <li>Nap timer on the Lock Screen</li>
+            <li>Sleep from Apple Health</li>
+            <li>Evening check-in</li>
+            <li>This week's Insights</li>
+          </ul>
+        </div>
+        <div class="plan is-pro">
+          <h3>Pro</h3>
+          <p class="price"><strong>€34.99 a year</strong>with a 7-day free trial, or €5.99 a month</p>
+          <ul>
+            <li>Everything in Starter</li>
+            <li>Alerts before a real crash, and optional dip reminders</li>
+            <li>Plan your peak around your busy hours</li>
+            <li>Predictions that move to when you really crash</li>
+            <li>Your personal sleep need</li>
+            <li>Full Insights, with bedtime and first-coffee reminders</li>
+            <li>Home Screen and Lock Screen widgets</li>
+          </ul>
+        </div>
+      </div>
+      <p class="plans-note">Prices in euros. The App Store shows the price for your country. Cancel any time in your App Store settings.</p>
+    </div>
+  </section>
+
+  <section id="privacy" style="padding-top:24px">
+    <div class="wrap">
+      <div class="privacy">
+        <div>
+          <h2>Your data stays on your iPhone.</h2>
+          <p>Stayful has no account and no server of its own. Your sleep, coffees and naps live on your phone, and your Apple Health data never leaves it. Anonymous usage stats are sent only if you say yes.</p>
+          <p><a href="/privacy">Read the privacy policy</a></p>
+        </div>
+        <div class="facts">
+          <div class="fact"><strong>Apple Health: Sleep only</strong><span>Read only. Stayful never writes to Health.</span></div>
+          <div class="fact"><strong>Usage stats only with your yes</strong><span>Anonymous, on EU servers, off any time in Settings.</span></div>
+          <div class="fact"><strong>This site sets no cookies</strong><span>And loads nothing from other servers.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:24px">
+    <div class="wrap">
+      <h2 class="section-title">Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>Do I need a sleep tracker?</summary>
+          <p>Stayful reads your sleep from Apple Health if you use a watch or a sleep app. Without one, it uses the usual bedtime and wake-up you enter, and you tap "I'm up" in the morning.</p>
+        </details>
+        <details>
+          <summary>How accurate are the predictions?</summary>
+          <p>They start from a model of sleep pressure, your body clock and caffeine. Each evening you can answer "Around what time did you crash?", and Insights show how close each prediction was. With Pro, predictions move to the time you actually crash.</p>
+        </details>
+        <details>
+          <summary>Will a late coffee ruin my sleep?</summary>
+          <p>Stayful tracks how much caffeine is still active and shows your last good time for a cup. When you log one after it, a notice tells you before you save. It also never suggests more than 400 mg of caffeine in a day, the level EFSA gives for adults.</p>
+        </details>
+        <details>
+          <summary>Is Stayful a medical app?</summary>
+          <p>No. Stayful gives estimates for personal planning only. It is not a medical device and does not provide medical advice.</p>
+        </details>
+        <details>
+          <summary>How do I cancel Pro?</summary>
+          <p>In your iPhone's Settings, tap your name, then Subscriptions. Cancel at least 24 hours before the renewal date.</p>
+        </details>
+        <details>
+          <summary>Is there an Android version?</summary>
+          <p>Stayful is iPhone only for now.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <img class="icon" src="img/icon-128.png" width="88" height="88" alt="">
+      <h2>See your next crash<br><span class="amber">before it hits.</span></h2>
+      <div class="cta">
+        <a class="store" href="#get">Coming soon on the App Store</a>
+        <p class="fine">Free to download. Pro comes with a 7-day free trial.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <span>© 2026 Stayful</span>
+      <nav aria-label="Legal">
+        <a href="/privacy">Privacy</a>
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+        <a href="/legal">Legal notice</a>
+        <a href="/support">Support</a>
+        <a href="mailto:contact@stayful.app">contact@stayful.app</a>
+      </nav>
+    </div>
+    <p class="disclaimer">Stayful gives estimates for personal planning only. It is not a medical device and does not provide medical advice.</p>
+  </div>
+</footer>
+
+</body>
+</html>
